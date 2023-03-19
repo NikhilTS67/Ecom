@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+  {% if category %}
+    {{ category.description|truncatewords:155 }}
+  {% else %}
+    Welcome to KBZ Store
+  {% endif %}
+{% endblock %}
+{% block title %}
+  {% if category %}
+    {{ category.name}} - KBZ store
+  {% endif %}
+{% endblock %}
+{% block content %}
+<!--  {% if category %}-->
+<!--    <div>-->
+<!--      <div class="row my_row_class">-->
+<!--        <div class="mx_auto">-->
+<!--          <p><a href="{% url 'shop:allProductCategory' %}">Our Product Collections</a> </p>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  {% endif %}-->
+  {% if category %}
+    <div class="mx_auto">
+    <img class="card-img-top my_image" style="text-align:center" src="{{category.image.url}}" alt="{{category.name}}">
+    </div>
+    <br>
+    <h1 class="text-center my_title">{{category.name}}</h1>
+    <p class="text-justify">{{category.description}}</p>
+  {% else %}
+    <div style="text-align:center">
+    <img class="my_image my_image_padding" src="{% static 'img/banner.png' %}" height="500px" width="1800" ="center" alt="our Products">
+    </div>
+    <br>
+    <div class="container-fluid">
+    <h1 class="text-center my_title">KBZ Products Collections</h1>
+    <p class="text-justify">"On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and demoralized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee the pain and trouble that are bound to ensue; and equal blame belongs to those who fail in their duty through weakness of will, which is the same as saying through shrinking from toil and pain. These cases are perfectly simple and easy to distinguish. In a free hour, when our power of choice is untrammelled and when nothing prevents our being able to do what we like best, every pleasure is to be welcomed and every pain avoided. But in certain circumstances and owing to the claims of duty or the obligations of business it will frequently occur that pleasures have to be repudiated and annoyances accepted. The wise man therefore always holds in these matters to this principle of selection: he rejects pleasures to secure other greater pleasures, or else he endures pains to avoid worse pains."
+    </p>
+    </div>
+  {% endif %}
+  <div class="container">
+    <div class="row mx_auto">
+      {% for product in products.object_list %}
+      <div class="my_bottom_margin col-9 col-sm-12 col-md-4 col-lg-4">
+        <div class="Card text-center" style="min-width:18rem">
+          <a href="{{product.get_url}}"><img class="card-img-top my_image" src="{{product.image.url}}" width="400" height="400" alt="{{product.name}}"></a>
+          <div class="card-body">
+            <h4>{{product.name}}</h4>
+            <p>Rs.{{product.price}}</p>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="mx_auto">
+      {% if products.paginator.num_pages > 1 %}
+           <div class="text-center">
+        {% for pg in products.paginator.page_range %}
+        <a href="?page={{pg}}" class="btn btn-light btn-sm {% if products.number == pg %} active {% endif %}">{{pg}}</a>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}
